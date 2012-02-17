@@ -12,9 +12,6 @@ class DSLRunner {
         cl.delegate = this
 
         use([Extras, TimeCategory]) { //because we need to use the Extras to call 2.years etc.
-            Date.metaClass.bis = { Date s -> // add new method to Date called bis which takes a Date as an Argument and returns a Range
-                (delegate..s) // return new Range
-            }
             Number.metaClass.getJahre = {
                 delegate.years
             }
@@ -56,6 +53,14 @@ class DSLRunner {
         this.charTypes += cType
     }
 
+    // make Command Expression with higher order function (von) which returns a new function "bis"
+    // http://www.canoo.com/blog/2011/12/08/the-art-of-groovy-command-expressions-in-dsls/
+    def von(Date date) {
+        [bis: { DatumDependentDuration duration ->
+            (date..date + duration) //return new Range for Dates
+        }]
+    }
+
     static void main(String[] args) {
         DSLRunner runner = new DSLRunner()
         if (args.length < 1) { runner.usage() }
@@ -69,6 +74,7 @@ class DSLRunner {
 
         def binding = new Binding()
         binding.run = { Closure cl -> runner.loadDSL(cl) }
+        binding.von = runner.von; //bind the higher order functinon "von" as a command expression to the closure.
         binding.heute = new Date();
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)

@@ -1,7 +1,9 @@
+
+
 partner.alle { partner ->
     ereignisse.alle { ereignis ->
-      (heute.bis(heute + 2.jahre)).alle { tag ->
-
+      von heute bis 2.jahre alle { tag ->
+          new TestObj(partner, tag, ereignis)
       }
     }
 }
