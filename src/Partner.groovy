@@ -7,13 +7,5 @@
 class Partner {
 
     def name
-    def mainCollection =  ['bookings', 'hrs']
-
-    def alle = { Closure closure ->
-        mainCollection.each {
-            closure.delegate = closure.owner
-            closure(it)
-        }
-    }
 
 }

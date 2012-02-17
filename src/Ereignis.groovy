@@ -6,10 +6,5 @@
  * Time: 3:28 PM
  */
 class Ereignis {
-    def alle = { Closure closure ->
-        ['silvester', 'itb'].each {
-            closure.delegate = closure.owner
-            closure(it)
-        }
-    }
+    String name
 }

@@ -26,6 +26,8 @@ class DSLRunner {
                     closure(it)
                 }
             }
+            //adding the method alle to the Collection class for iteration.
+            Collection.metaClass.alle = callEachOnDelegate
 
             Range.metaClass {
                 alle = callEachOnDelegate
@@ -60,7 +62,10 @@ class DSLRunner {
             ]
         }
         if (name == "ereignisse") {
-            return new Ereignis().alle
+            return [
+                    new Ereignis(name: "silvester"),
+                    new Ereignis(name: "ostern")
+            ]
         }
     }
 
