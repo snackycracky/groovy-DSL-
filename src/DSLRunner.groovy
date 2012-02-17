@@ -17,16 +17,21 @@ class DSLRunner {
             //jahr and jahre have now the same functionality
             Number.metaClass {
                 getJahre { delegate.years }
-                getJahr  { delegate.jahre }
+                getJahr { delegate.jahre }
             }
 
-
-            Range.metaClass.alle = { Closure closure ->
+            def callEachOnDelegate = { Closure closure ->
                 delegate.each {
                     closure.delegate = closure.owner
                     closure(it)
                 }
             }
+
+            Range.metaClass {
+                alle = callEachOnDelegate
+                jederTag = callEachOnDelegate
+            }
+
             cl() //call the closure
         }
 
