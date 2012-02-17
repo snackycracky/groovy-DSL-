@@ -3,11 +3,8 @@
  * Created by IntelliJ IDEA.
  * User: nils
  * Date: 2/17/12
- * Time: 3:28 PM
+ * Time: 8:29 PM
  */
-class Ereignis {
+class EstateRoom {
     String name
-    Date von
-    Date bis
-    Float preiseerhoehung
 }

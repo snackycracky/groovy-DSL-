@@ -20,6 +20,16 @@ class DSLRunner {
                 getJahr { delegate.jahre }
             }
 
+            Number.metaClass.prozent = { args ->
+                args * delegate / 100
+            }
+
+
+            Date.metaClass.innerhalb { ereignis ->
+                delegate >= ereignis.von && delegate <= ereignis.bis
+            }
+
+
             def callEachOnDelegate = { Closure closure ->
                 delegate.each {
                     closure.delegate = closure.owner
@@ -61,10 +71,25 @@ class DSLRunner {
                     new Partner(name: "hrs")
             ]
         }
+        if (name == "hotel") {
+            return new Estate(name: "hotelname", roomTypes: [
+                    new Type(name: "typ1", grundpreis: 95, estateRooms: [
+                            new EstateRoom(name: "303"),
+                            new EstateRoom(name: "403"),
+                            new EstateRoom(name: "503")
+                    ]),
+                    new Type(name: "typ2", grundpreis: 105, estateRooms: [
+                            new EstateRoom(name: "103"),
+                            new EstateRoom(name: "104"),
+                            new EstateRoom(name: "105")
+                    ]),
+
+            ]);
+        }
         if (name == "ereignisse") {
             return [
-                    new Ereignis(name: "silvester"),
-                    new Ereignis(name: "ostern")
+                    new Ereignis(name: "silvester", von: new Date(), bis: new Date() + 10, preiseerhoehung: 20),
+                    new Ereignis(name: "ostern", von: new Date() + 11, bis: new Date() + 20, preiseerhoehung: 40)
             ]
         }
     }
@@ -84,10 +109,27 @@ class DSLRunner {
         }]
     }
 
+
+    def addiere(Number n) {
+        [zu: { variable ->
+            n + variable
+        }]
+    }
+
     def alle(argumente) {
         argumente.von.each {
             argumente.aufdrosseln.call(it)
         }
+    }
+
+    def wenn(bedingung) {
+        [dann: { befehl ->
+            if (bedingung) {
+                befehl
+            } else {
+                0
+            }
+        }]
     }
 
     static void main(String[] args) {
@@ -105,6 +147,7 @@ class DSLRunner {
         binding.run = { Closure cl -> runner.loadDSL(cl) }
         binding.von = runner.von; //bind the higher order functinon "von" as a command expression to the closure.
         binding.alle = runner.alle; //bind the higher order functinon "von" as a command expression to the closure.
+        binding.addiere = runner.addiere; //bind the higher order functinon "von" as a command expression to the closure.
         binding.heute = new Date();
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
