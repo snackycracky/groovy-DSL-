@@ -1,6 +1,7 @@
 import groovy.time.DatumDependentDuration
 import groovy.time.Duration
 import groovy.time.TimeDuration
+import groovy.time.TimeCategory
 
 class DSLRunner {
 
@@ -16,9 +17,18 @@ class DSLRunner {
         println "loading DSL ..."
         cl.delegate = this
 
-        use([Extras, groovy.time.TimeCategory]) { //because we need to use the Extras to call 2.years etc.
+        use([Extras, TimeCategory]) { //because we need to use the Extras to call 2.years etc.
             Date.metaClass.bis = { Date s -> // add new method to Date called bis which takes a Date as an Argument and returns a Range
                 (delegate..s) // return new Range
+            }
+            Number.metaClass.getJahre = {
+                new Duration(365 * delegate, 0, 0, 0, 0)
+            }
+            Range.metaClass.alle = { Closure closure ->
+                delegate.each {
+                    closure.delegate = closure.owner
+                    closure(it)
+                }
             }
             cl()
         }
