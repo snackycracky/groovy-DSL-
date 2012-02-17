@@ -12,9 +12,15 @@ class DSLRunner {
         cl.delegate = this
 
         use([Extras, TimeCategory]) { //because we need to use the Extras to call 2.years etc.
-            Number.metaClass.getJahre = {
-                delegate.years
+
+            //http://groovy.codehaus.org/api/groovy/lang/ExpandoMetaClass.html
+            //jahr and jahre have now the same functionality
+            Number.metaClass {
+                getJahre { delegate.years }
+                getJahr  { delegate.jahre }
             }
+
+
             Range.metaClass.alle = { Closure closure ->
                 delegate.each {
                     closure.delegate = closure.owner
