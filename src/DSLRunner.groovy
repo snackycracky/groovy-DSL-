@@ -16,7 +16,7 @@ class DSLRunner {
                 (delegate..s) // return new Range
             }
             Number.metaClass.getJahre = {
-                new Duration(365 * delegate, 0, 0, 0, 0)
+                delegate.years
             }
             Range.metaClass.alle = { Closure closure ->
                 delegate.each {
