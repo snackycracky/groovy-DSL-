@@ -94,12 +94,6 @@ class DSLRunner {
         }
     }
 
-    def newCharacterType(name, cl) {
-        CharacterType cType = new CharacterType(name)
-        cl.delegate = cType
-        cl()
-        this.charTypes += cType
-    }
 
     // make Command Expression with higher order function (von) which returns a new function "bis"
     // http://www.canoo.com/blog/2011/12/08/the-art-of-groovy-command-expressions-in-dsls/
