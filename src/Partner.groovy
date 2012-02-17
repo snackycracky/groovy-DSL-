@@ -5,10 +5,15 @@
  * Time: 2:54 PM
  */
 class Partner {
+
+    def name
+    def mainCollection =  ['bookings', 'hrs']
+
     def alle = { Closure closure ->
-        ['bookings', 'hrs'].each {
+        mainCollection.each {
             closure.delegate = closure.owner
             closure(it)
         }
     }
+
 }

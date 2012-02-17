@@ -30,6 +30,7 @@ class DSLRunner {
             Range.metaClass {
                 alle = callEachOnDelegate
                 jederTag = callEachOnDelegate
+                alleTage = callEachOnDelegate
             }
 
             cl() //call the closure
@@ -41,6 +42,9 @@ class DSLRunner {
     //     methodName { ... }
     // treat them like a new character type definition
     def methodMissing(String name, args) {
+        if (name == "partner") {
+            return new Partner()
+        }
         println "methodMissing: ${name}"
         if (args.length == 1 && args[0] instanceof Closure) {
             println "encountered new character archetype: ${name}"
@@ -50,10 +54,13 @@ class DSLRunner {
 
     def propertyMissing(String name) {
         if (name == "partner") {
-            return new Partner()
+            return [
+                    new Partner(name: "bookings"),
+                    new Partner(name: "hrs")
+            ]
         }
         if (name == "ereignisse") {
-            return new Ereignis()
+            return new Ereignis().alle
         }
     }
 
@@ -72,6 +79,12 @@ class DSLRunner {
         }]
     }
 
+    def alle(argumente) {
+        argumente.von.each {
+            argumente.aufdrosseln.call(it)
+        }
+    }
+
     static void main(String[] args) {
         DSLRunner runner = new DSLRunner()
         if (args.length < 1) { runner.usage() }
@@ -86,6 +99,7 @@ class DSLRunner {
         def binding = new Binding()
         binding.run = { Closure cl -> runner.loadDSL(cl) }
         binding.von = runner.von; //bind the higher order functinon "von" as a command expression to the closure.
+        binding.alle = runner.alle; //bind the higher order functinon "von" as a command expression to the closure.
         binding.heute = new Date();
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
