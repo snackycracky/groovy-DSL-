@@ -7,12 +7,6 @@ class DSLRunner {
 
     def charTypes = []
 
-    static enum DISPTYPE {
-        GOOD,
-        EVIL,
-        NEUTRAL
-    }
-
     void loadDSL(Closure cl) {
         println "loading DSL ..."
         cl.delegate = this
@@ -30,7 +24,7 @@ class DSLRunner {
                     closure(it)
                 }
             }
-            cl()
+            cl() //call the closure
         }
 
     }
@@ -62,11 +56,6 @@ class DSLRunner {
         this.charTypes += cType
     }
 
-    void usage() {
-        println "usage: DSLRunner <scriptFile>\n"
-        System.exit(1)
-    }
-
     static void main(String[] args) {
         DSLRunner runner = new DSLRunner()
         if (args.length < 1) { runner.usage() }
@@ -81,7 +70,6 @@ class DSLRunner {
         def binding = new Binding()
         binding.run = { Closure cl -> runner.loadDSL(cl) }
         binding.heute = new Date();
-
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
 
