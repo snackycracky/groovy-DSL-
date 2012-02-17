@@ -16,8 +16,10 @@ class DSLRunner {
         println "loading DSL ..."
         cl.delegate = this
 
-        use( [Extras, groovy.time.TimeCategory] ){
-
+        use([Extras, groovy.time.TimeCategory]) { //because we need to use the Extras to call 2.years etc.
+            Date.metaClass.bis = { Date s -> // add new method to Date called bis which takes a Date as an Argument and returns a Range
+                (delegate..s) // return new Range
+            }
             cl()
         }
 
@@ -35,11 +37,11 @@ class DSLRunner {
     }
 
     def propertyMissing(String name) {
-        if(name == "partner"){
-          return new Partner()
+        if (name == "partner") {
+            return new Partner()
         }
-        if(name == "ereignisse"){
-          return new Ereignis()
+        if (name == "ereignisse") {
+            return new Ereignis()
         }
     }
 
@@ -69,9 +71,7 @@ class DSLRunner {
         def binding = new Binding()
         binding.run = { Closure cl -> runner.loadDSL(cl) }
         binding.heute = new Date();
-        Date.metaClass.getBis = {
-            println "x"
-        }
+
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
 
