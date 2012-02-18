@@ -18,19 +18,21 @@ wenn Wahrheitswert dann zahl                = die zahl wird nur dann addiert, we
 liste = []                                  = neue leere liste wird definiert
 liste << ding                               = ding wird zur liste hinzugefuegt
 x = 0                                       = die variable x wird definiert und erhaelt den wert 0
+
 ------------------------------*/
 
 liste = []
 
-hotel.roomTypes alle { typ ->
+Hotel.Zimmertypen.alle { typ ->
 
-  ereignisse alle { ereignis ->
+  ereignisse.alle { ereignis ->
 
      von heute bis 1.jahr alleTage { tag ->
 
         tagesPreis = typ.grundpreis
 
-        tagesPreis += wenn tag.innerhalb(ereignis) dann 10.prozent(tagesPreis)  // 10 / tagesPreis * 100
+        TagInnerhalbEreignis = tag.innerhalb ereignis
+        tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
 
         liste << [typ.name, tag, tagesPreis]
         println "$typ.name, $tag, $tagesPreis"

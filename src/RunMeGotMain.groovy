@@ -2,11 +2,17 @@ import groovy.time.*
 
 class RunMeGotMain {
 
+    class EnhancedNumber {
+        static Number prozent(Number self, Number other) {
+            other * self / 100
+        }
+    }
+
     void loadDSL(Closure cl) {
-        println "loading DSL ..."
+
         cl.delegate = this
 
-        use([Extras, TimeCategory]) { //because we need to use the Extras to call 2.years etc.
+        use([EnhancedNumber, TimeCategory]) { //category pattern because we need to use the Extras to call 2.years etc.
 
             //http://groovy.codehaus.org/api/groovy/lang/ExpandoMetaClass.html
             //jahr and jahre have now the same functionality
@@ -15,12 +21,7 @@ class RunMeGotMain {
                 getJahr { delegate.jahre }
             }
 
-            Number.metaClass.prozent = { args ->
-                args * delegate / 100
-            }
-
-
-            Date.metaClass.innerhalb { ereignis ->
+            Date.metaClass.innerhalb { Ereignis ereignis ->
                 delegate >= ereignis.von && delegate <= ereignis.bis
             }
 
@@ -62,7 +63,7 @@ class RunMeGotMain {
                     new Partner(name: "hrs")
             ]
         }
-        if (name == "hotel") {
+        if (name == "Hotel") {
             return new Estate(name: "hotelname", roomTypes: [
                     new Type(name: "typ1", grundpreis: 95, estateRooms: [
                             new EstateRoom(name: "303"),

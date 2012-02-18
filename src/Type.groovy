@@ -9,4 +9,11 @@ class Type {
     String name;
     Double grundpreis;
     List<EstateRoom> estateRooms;
+
+
+    def propertyMissing(String name){
+        if(name.contains("rate") || name.contains("pri")){
+            return grundpreis;
+        }
+    }
 }

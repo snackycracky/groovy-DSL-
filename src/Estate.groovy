@@ -10,5 +10,10 @@ public class Estate {
     
     String name;
     List<Type> roomTypes ;
-    
+
+    def propertyMissing(String name){
+        if(name.contains("typ")){
+            return roomTypes;
+        }
+    }
 }
