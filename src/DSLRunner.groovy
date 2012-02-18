@@ -1,11 +1,6 @@
-import groovy.time.DatumDependentDuration
-import groovy.time.Duration
-import groovy.time.TimeDuration
-import groovy.time.TimeCategory
+import groovy.time.*
 
 class DSLRunner {
-
-    def charTypes = []
 
     void loadDSL(Closure cl) {
         println "loading DSL ..."
@@ -50,17 +45,13 @@ class DSLRunner {
 
     }
 
-    // intercept missing methods, if they look like
-    //     methodName { ... }
-    // treat them like a new character type definition
     def methodMissing(String name, args) {
         if (name == "partner") {
             return new Partner()
         }
         println "methodMissing: ${name}"
         if (args.length == 1 && args[0] instanceof Closure) {
-            println "encountered new character archetype: ${name}"
-            newCharacterType(name, args[0])
+            println "do something with the mmissing method if the first arg is a closure"
         }
     }
 
@@ -93,7 +84,6 @@ class DSLRunner {
             ]
         }
     }
-
 
     // make Command Expression with higher order function (von) which returns a new function "bis"
     // http://www.canoo.com/blog/2011/12/08/the-art-of-groovy-command-expressions-in-dsls/
@@ -146,7 +136,5 @@ class DSLRunner {
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
 
-        // print out character types
-        runner.charTypes.each { println it }
     }
 }
