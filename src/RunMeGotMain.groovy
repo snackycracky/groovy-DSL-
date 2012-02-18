@@ -10,9 +10,17 @@ class RunMeGotMain {
         static Boolean kleiner(Number self, Number other) {
             self < other
         }
+
+        static Boolean groesser(Number self, Number other) {
+            self < other
+        }
+        static Boolean und(Boolean self, Object x){
+            self && x
+        }
+
     }
     class RangeEnhancher {
-        static Integer abstand(ObjectRange self){
+        static Integer abstand(ObjectRange self) {
             return self.size();
         }
     }
@@ -53,7 +61,7 @@ class RunMeGotMain {
                 alle = callEachOnDelegate
                 jederTag = callEachOnDelegate
                 alleTage = callEachOnDelegate
-                getDifferenz = { ->
+                getDifferenz = {->
                     delegate.size()
                 }
             }
@@ -97,8 +105,8 @@ class RunMeGotMain {
         }
         if (name == "ereignisse") {
             return [
-                    new Ereignis(name: "silvester", von: new Date(), bis: new Date() + 10, preiseerhoehung: 20),
-                    new Ereignis(name: "ostern", von: new Date() + 11, bis: new Date() + 20, preiseerhoehung: 40)
+                    new Ereignis(name: "silvester", von: new Date() + 30, bis: new Date() + 33, preiseerhoehung: 20),
+                    new Ereignis(name: "ostern", von: new Date() + 51, bis: new Date() + 60, preiseerhoehung: 40)
             ]
         }
     }
@@ -110,7 +118,7 @@ class RunMeGotMain {
             if (timeThing instanceof DatumDependentDuration) {
                 return (date..date + timeThing) //return new Range for Dates
             } else if (timeThing instanceof Date) {
-                use(groovy.time.TimeCategory,RangeEnhancher) {
+                use(groovy.time.TimeCategory, RangeEnhancher) {
                     (date..timeThing)
                 }
             }
@@ -132,6 +140,15 @@ class RunMeGotMain {
         argumente.von.each {
             argumente.aufdrosseln.call(it)
         }
+    }
+
+    def differenz(argumente) {
+        (argumente.von..argumente.bis)
+    }
+
+
+    def tage(argumente) {
+        return  (argumente.bis - argumente.von).days
     }
 
     def teste(args) {
