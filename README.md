@@ -86,8 +86,8 @@ Hotel.Zimmertypen.alle { typ ->
             tageEntfernt = tage von: heute, bis: ereignis.von
            // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
 
-            nichtvorbei = tageEntfernt > 0
-            bald = tageEntfernt < 10
+            nichtvorbei = tageEntfernt groesser 0
+            bald = tageEntfernt kleiner 10
 
             lastMinuteRabatt = (tageEntfernt * 0.5).prozent tagesPreis
 
