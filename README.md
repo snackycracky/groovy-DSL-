@@ -81,7 +81,7 @@ hotel.roomTypes alle { typ ->
 
         tagesPreis += wenn tag.innerhalb(ereignis) dann 10.prozent(tagesPreis)
 
-        liste << [typ.name, tag, tagesPreis]
+        liste hinzufuegen [typ.name, tag, tagesPreis]
 
      }
 
