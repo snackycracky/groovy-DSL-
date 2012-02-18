@@ -73,30 +73,37 @@ liste = []
 
 Hotel.Zimmertypen.alle { typ ->
 
-  ereignisse.alle { ereignis ->
-
-     von heute bis 1.jahr alleTage { tag ->
+  von heute bis 3.months alleTage { tag ->
 
         tagesPreis = typ.grundpreis
 
-        TagInnerhalbEreignis = tag.innerhalb ereignis
-        tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
+        ereignisse.alle { ereignis ->
 
-        zeitraum = von heute bis ereignis.von
-        bald = (zeitraum.differenz).kleiner 20
-        lastMinuteRabatt =  (zeitraum.differenz * 0.05).prozent tagesPreis
+            TagInnerhalbEreignis = tag.innerhalb ereignis
+            if(TagInnerhalbEreignis) println "innerhalb"
+            tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
 
-        tagesPreis -= wenn bald dann lastMinuteRabatt
+            tageEntfernt = tage von: heute, bis: ereignis.von
+           // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
 
-        liste hinzufuegen [typ.name, tag, tagesPreis]
+            nichtvorbei = tageEntfernt > 0
+            bald = tageEntfernt < 10
+
+            lastMinuteRabatt = (tageEntfernt * 0.5).prozent tagesPreis
+
+            tagesPreis += wenn bald.und(nichtvorbei) dann lastMinuteRabatt
+        }
+
+        liste hinzu [typ.name, tag, tagesPreis]
         println "$typ.name, $tag, $tagesPreis }"
 
      }
 
   }
 
-}
+
 
 teste liste.size() != 0
+
 </pre>
 
