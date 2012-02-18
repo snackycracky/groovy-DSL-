@@ -2,7 +2,7 @@
 
 # testing groovy DSL features for a price calculation logic #
 
-## pre defined language components
+## pre defined language components in German
 
 <table>
 <tbody><tr>

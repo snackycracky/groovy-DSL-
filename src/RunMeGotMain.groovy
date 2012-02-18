@@ -1,6 +1,6 @@
 import groovy.time.*
 
-class DSLRunner {
+class RunMeGotMain {
 
     void loadDSL(Closure cl) {
         println "loading DSL ..."
@@ -117,7 +117,7 @@ class DSLRunner {
     }
 
     static void main(String[] args) {
-        DSLRunner runner = new DSLRunner()
+        RunMeGotMain runner = new RunMeGotMain()
         if (args.length < 1) { runner.usage() }
 
         def script = new File(args[0]).text
