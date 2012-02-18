@@ -20,6 +20,8 @@ liste << ding                               = ding wird zur liste hinzugefuegt
 x = 0                                       = die variable x wird definiert und erhaelt den wert 0
 
 ------------------------------*/
+//vielleicht auch hier einprogrammieren wie oft ein preisupdate zum partner hochgeladen werden soll.
+
 
 liste = []
 
@@ -34,8 +36,14 @@ Hotel.Zimmertypen.alle { typ ->
         TagInnerhalbEreignis = tag.innerhalb ereignis
         tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
 
+        zeitraum = von heute bis ereignis.von
+        bald = (zeitraum.differenz).kleiner 20
+        lastMinuteRabatt =  (zeitraum.differenz * 0.05).prozent tagesPreis
+
+        tagesPreis -= wenn bald dann lastMinuteRabatt
+
         liste << [typ.name, tag, tagesPreis]
-        println "$typ.name, $tag, $tagesPreis"
+        println "$typ.name, $tag, $tagesPreis }"
 
      }
 
@@ -43,6 +51,6 @@ Hotel.Zimmertypen.alle { typ ->
 
 }
 
-assert liste.size() != 0
+teste liste.size() != 0
 
 

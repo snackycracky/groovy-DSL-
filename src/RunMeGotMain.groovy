@@ -6,6 +6,15 @@ class RunMeGotMain {
         static Number prozent(Number self, Number other) {
             other * self / 100
         }
+
+        static Boolean kleiner(Number self, Number other) {
+            self < other
+        }
+    }
+    class RangeEnhancher {
+        static Integer abstand(ObjectRange self){
+            return self.size();
+        }
     }
 
     void loadDSL(Closure cl) {
@@ -19,6 +28,11 @@ class RunMeGotMain {
             Number.metaClass {
                 getJahre { delegate.years }
                 getJahr { delegate.jahre }
+            }
+            BigDecimal.metaClass {
+                getProzent { args ->
+                    delegate * args / 100
+                }
             }
 
             Date.metaClass.innerhalb { Ereignis ereignis ->
@@ -35,10 +49,13 @@ class RunMeGotMain {
             //adding the method alle to the Collection class for iteration.
             Collection.metaClass.alle = callEachOnDelegate
 
-            Range.metaClass {
+            ObjectRange.metaClass {
                 alle = callEachOnDelegate
                 jederTag = callEachOnDelegate
                 alleTage = callEachOnDelegate
+                getDifferenz = { ->
+                    delegate.size()
+                }
             }
 
             cl() //call the closure
@@ -88,10 +105,20 @@ class RunMeGotMain {
 
     // make Command Expression with higher order function (von) which returns a new function "bis"
     // http://www.canoo.com/blog/2011/12/08/the-art-of-groovy-command-expressions-in-dsls/
-    def von(Date date) {
-        [bis: { DatumDependentDuration duration ->
-            (date..date + duration) //return new Range for Dates
+    def bisArg = { date ->
+        [bis: { timeThing ->
+            if (timeThing instanceof DatumDependentDuration) {
+                return (date..date + timeThing) //return new Range for Dates
+            } else if (timeThing instanceof Date) {
+                use(groovy.time.TimeCategory,RangeEnhancher) {
+                    (date..timeThing)
+                }
+            }
         }]
+    }
+
+    def von(Date date) {
+        bisArg(date)
     }
 
 
@@ -105,6 +132,10 @@ class RunMeGotMain {
         argumente.von.each {
             argumente.aufdrosseln.call(it)
         }
+    }
+
+    def teste(args) {
+        assert args
     }
 
     def wenn(bedingung) {
@@ -133,6 +164,7 @@ class RunMeGotMain {
         binding.von = runner.von; //bind the higher order functinon "von" as a command expression to the closure.
         binding.alle = runner.alle; //bind the higher order functinon "von" as a command expression to the closure.
         binding.addiere = runner.addiere; //bind the higher order functinon "von" as a command expression to the closure.
+        binding.differenz = runner.differenz; //bind the higher order functinon "von" as a command expression to the closure.
         binding.heute = new Date();
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
