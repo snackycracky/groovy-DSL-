@@ -32,8 +32,8 @@ class SimpleTest {
         toMethod(date)
     }
 
-    def difference(Range range) {
-        range.size() //for the sake of simplicity
+    def difference(argumente){
+        Math.abs(argumente.from - argumente.to)
     }
 
     static void eval(dslContent, assertion) {
@@ -58,9 +58,8 @@ class SimpleTest {
 
     static void main(String[] args) {
         eval("x = from today to tomorrow", (today..tomorrow))
-        eval("x = difference(from(today).to(tomorrow))", 2)
-        eval("x = difference from today to tomorrow ", 2)
-
+        eval("x = difference(from(today).to(tomorrow))", 1)
+        eval("x = difference from: today, to: tomorrow ", 1)
     }
 
 }
