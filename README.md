@@ -71,17 +71,25 @@
 <pre>
 liste = []
 
-hotel.roomTypes alle { typ ->
+Hotel.Zimmertypen.alle { typ ->
 
-  ereignisse alle { ereignis ->
+  ereignisse.alle { ereignis ->
 
      von heute bis 1.jahr alleTage { tag ->
 
         tagesPreis = typ.grundpreis
 
-        tagesPreis += wenn tag.innerhalb(ereignis) dann 10.prozent(tagesPreis)
+        TagInnerhalbEreignis = tag.innerhalb ereignis
+        tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
+
+        zeitraum = von heute bis ereignis.von
+        bald = (zeitraum.differenz).kleiner 20
+        lastMinuteRabatt =  (zeitraum.differenz * 0.05).prozent tagesPreis
+
+        tagesPreis -= wenn bald dann lastMinuteRabatt
 
         liste hinzufuegen [typ.name, tag, tagesPreis]
+        println "$typ.name, $tag, $tagesPreis }"
 
      }
 
@@ -89,6 +97,6 @@ hotel.roomTypes alle { typ ->
 
 }
 
-assert liste.size() != 0
+teste liste.size() != 0
 </pre>
 
