@@ -84,15 +84,25 @@ Hotel.Zimmertypen.alle { typ ->
             tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
 
             tageEntfernt = tage von: heute, bis: ereignis.von
-           // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
+            // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
 
-            nichtvorbei = tageEntfernt groesser 0
-            bald = tageEntfernt kleiner 10
+            nichtvorbei = tageEntfernt greaterThan 0
+            bald = tageEntfernt lessThan 10
 
             lastMinuteRabatt = (tageEntfernt * 0.5).prozent tagesPreis
 
             tagesPreis += wenn bald.und(nichtvorbei) dann lastMinuteRabatt
         }
+
+        // 0.5 = die hälfte aller zimmer ist belegt.
+        tagesauslastung = auslastung tag
+        // abhängig von der Auslastung wird ein teil von einem drittel der grundkostn aufaddiert.
+        tagesPreis += tagesauslastung / gesamtzimmer * (typ.grundpreis / 3)
+
+
+        wochenendaufschlag = wenn tag.wochenende dann 10 prozent tagesPreis
+        teste (tag.wochenende)? wochenendaufschlag != 0 : wochenendaufschlag == 0
+        tagesPreis += wochenendaufschlag
 
         liste hinzu [typ.name, tag, tagesPreis]
         println "$typ.name, $tag, $tagesPreis }"
@@ -102,8 +112,10 @@ Hotel.Zimmertypen.alle { typ ->
   }
 
 
-
 teste liste.size() != 0
+
+
+
 
 </pre>
 

@@ -22,7 +22,6 @@ x = 0                                       = die variable x wird definiert und 
 ------------------------------*/
 //vielleicht auch hier einprogrammieren wie oft ein preisupdate zum partner hochgeladen werden soll.
 
-
 liste = []
 
 Hotel.Zimmertypen.alle { typ ->
@@ -38,15 +37,27 @@ Hotel.Zimmertypen.alle { typ ->
             tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
 
             tageEntfernt = tage von: heute, bis: ereignis.von
-           // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
+            // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
 
             nichtvorbei = tageEntfernt > 0
             bald = tageEntfernt < 10
+
+
 
             lastMinuteRabatt = (tageEntfernt * 0.5).prozent tagesPreis
 
             tagesPreis += wenn bald.und(nichtvorbei) dann lastMinuteRabatt
         }
+
+        // 0.5 = die hälfte aller zimmer ist belegt.
+        tagesauslastung = auslastung tag
+        // abhängig von der Auslastung wird ein teil von einem drittel der grundkostn aufaddiert.
+        tagesPreis += tagesauslastung / gesamtzimmer * (typ.grundpreis / 3)
+
+
+        wochenendaufschlag = wenn tag.wochenende dann 10 prozent tagesPreis
+        assert (tag.wochenende)? wochenendaufschlag != 0 : wochenendaufschlag == 0
+        tagesPreis += wochenendaufschlag
 
         liste << [typ.name, tag, tagesPreis]
         println "$typ.name, $tag, $tagesPreis }"
@@ -57,6 +68,6 @@ Hotel.Zimmertypen.alle { typ ->
 
 
 
-teste liste.size() != 0
+assert liste.size() != 0
 
 

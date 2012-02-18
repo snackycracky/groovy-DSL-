@@ -1,4 +1,5 @@
 import groovy.time.*
+import java.text.SimpleDateFormat
 
 class RunMeGotMain {
 
@@ -14,7 +15,8 @@ class RunMeGotMain {
         static Boolean groesser(Number self, Number other) {
             self < other
         }
-        static Boolean und(Boolean self, Object x){
+
+        static Boolean und(Boolean self, Object x) {
             self && x
         }
 
@@ -43,8 +45,14 @@ class RunMeGotMain {
                 }
             }
 
-            Date.metaClass.innerhalb { Ereignis ereignis ->
-                delegate >= ereignis.von && delegate <= ereignis.bis
+            Date.metaClass {
+                innerhalb = { Ereignis ereignis ->
+                    delegate >= ereignis.von && delegate <= ereignis.bis
+                }
+                getWochenende = {
+                    delegate[Calendar.DAY_OF_WEEK] == Calendar.SATURDAY ||
+                            delegate[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY
+                }
             }
 
 
@@ -148,21 +156,27 @@ class RunMeGotMain {
 
 
     def tage(argumente) {
-        return  (argumente.bis - argumente.von).days
+        return (argumente.bis - argumente.von).days
     }
 
     def teste(args) {
         assert args
     }
 
+
+
     def wenn(bedingung) {
-        [dann: { befehl ->
+        [dann: { zahl ->
             if (bedingung) {
-                befehl
+                zahl
             } else {
                 0
             }
         }]
+    }
+
+    def auslastung(tag) {
+        AuslastungServiceDemo.auslastung(tag)
     }
 
     static void main(String[] args) {
@@ -182,6 +196,8 @@ class RunMeGotMain {
         binding.alle = runner.alle; //bind the higher order functinon "von" as a command expression to the closure.
         binding.addiere = runner.addiere; //bind the higher order functinon "von" as a command expression to the closure.
         binding.differenz = runner.differenz; //bind the higher order functinon "von" as a command expression to the closure.
+        binding.datenbank = runner.auslastung;
+        binding.gesamtzimmer = AuslastungServiceDemo.stammdaten.gesamtzimmer
         binding.heute = new Date();
         GroovyShell shell = new GroovyShell(binding)
         shell.evaluate(dsl)
