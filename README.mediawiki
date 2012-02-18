@@ -53,7 +53,7 @@
 
 
 === example ===
-
+'''
 liste = []
 
 hotel.roomTypes alle { typ ->
@@ -75,6 +75,6 @@ hotel.roomTypes alle { typ ->
 }
 
 assert liste.size() != 0
-
+'''
 
 
