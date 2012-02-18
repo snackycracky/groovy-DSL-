@@ -30,9 +30,10 @@ hotel.roomTypes alle { typ ->
 
         tagesPreis = typ.grundpreis
 
-        tagesPreis += wenn tag.innerhalb(ereignis) dann 10.prozent(tagesPreis)
+        tagesPreis += wenn tag.innerhalb(ereignis) dann 10.prozent(tagesPreis)  // 10 / tagesPreis * 100
 
         liste << [typ.name, tag, tagesPreis]
+        println "$typ.name, $tag, $tagesPreis"
 
      }
 
