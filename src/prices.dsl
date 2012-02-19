@@ -36,7 +36,7 @@ Hotel.Zimmertypen.alle { typ ->
             if(TagInnerhalbEreignis) println "innerhalb"
             tagesPreis += wenn TagInnerhalbEreignis dann 10 prozent tagesPreis   // oder auch:  10 / tagesPreis * 100
 
-            tageEntfernt = tage von: heute, bis: ereignis.von
+            tageEntfernt = tage von: heute, bis: ereignis.von // oder: abstand { von heute bis ereignis.von }
             // println "${tageEntfernt} weil anfang von ${ereignis.name} ist ${ereignis.von}"
 
             nichtvorbei = tageEntfernt > 0

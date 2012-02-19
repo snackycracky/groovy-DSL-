@@ -175,6 +175,11 @@ class RunMeGotMain {
         }]
     }
 
+    def abstand(closure) {
+        closure().size()
+    }
+
+
     def auslastung(tag) {
         AuslastungServiceDemo.auslastung(tag)
     }
