@@ -26,7 +26,7 @@ liste = []
 
 Hotel.Zimmertypen.alle { typ ->
 
-  von heute bis 3.months alleTage { tag ->
+  von heute bis 3.months alleTage { tag ->     //oder: heute bis 2.months
 
         tagesPreis = typ.grundpreis
 
@@ -54,6 +54,9 @@ Hotel.Zimmertypen.alle { typ ->
         // abhängig von der Auslastung wird ein teil von einem drittel der grundkostn aufaddiert.
         tagesPreis += tagesauslastung / gesamtzimmer * (typ.grundpreis / 3)
 
+        freieZimmer = auslastung tag
+
+        tagesPreis += freieZimmer / gesamtzimmer * (typ.grundpreis / 3)
 
         wochenendaufschlag = wenn tag.wochenende dann 10 prozent tagesPreis
         assert (tag.wochenende)? wochenendaufschlag != 0 : wochenendaufschlag == 0
@@ -69,5 +72,6 @@ Hotel.Zimmertypen.alle { typ ->
 
 
 assert liste.size() != 0
+println "finished"
 
 

@@ -53,6 +53,9 @@ class RunMeGotMain {
                     delegate[Calendar.DAY_OF_WEEK] == Calendar.SATURDAY ||
                             delegate[Calendar.DAY_OF_WEEK] == Calendar.SUNDAY
                 }
+                bis = { Date d ->
+                    (delegate..d)
+                }
             }
 
 
@@ -190,7 +193,7 @@ class RunMeGotMain {
 
         def script = new File(args[0]).text
         def dsl = """
-	  run {
+	  run(){
 	    ${script}
 	  }
 	"""
